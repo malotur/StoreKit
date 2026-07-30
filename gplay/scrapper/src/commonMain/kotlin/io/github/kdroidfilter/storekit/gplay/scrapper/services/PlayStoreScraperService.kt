@@ -257,7 +257,21 @@ suspend fun getGooglePlayApplicationInfo(appId: String, lang: String = "en", cou
  * named helper so a future Play layout change is isolated and can be fixture-tested.
  */
 internal fun extractRecentChanges(detailJson: JsonElement): String =
-    nestedLookup(detailJson, listOf(1, 2, 144, 1, 1)).asStringOrNull()
+    listOfNotNull(
+        nestedLookup(detailJson, listOf(1, 2, 144, 1, 1)).asStringOrNull(),
+        // Google occasionally relocates the adjacent version/update/changelog fields into an
+        // object keyed by their former index.  This is the `-1, "145"` fallback used by the
+        // actively maintained Node scraper, adapted to StoreKit's JsonElement tree.
+        nestedLookup(findRelocatedField(nestedLookup(detailJson, listOf(1, 2)), "145"), listOf(1, 1))
+            .asStringOrNull(),
+    ).firstOrNull { it.isNotBlank() }
         ?.filter { !it.isISOControl() || it == '\n' || it == '\t' }
         ?.trim()
         .orEmpty()
+
+private fun findRelocatedField(element: JsonElement?, key: String): JsonElement? = when (element) {
+    is kotlinx.serialization.json.JsonObject -> element[key]
+        ?: element.values.firstNotNullOfOrNull { findRelocatedField(it, key) }
+    is JsonArray -> element.firstNotNullOfOrNull { findRelocatedField(it, key) }
+    else -> null
+}

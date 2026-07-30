@@ -14,4 +14,13 @@ class RecentChangesExtractionTest {
 
         assertEquals("Bug fixes\nImproved stability", extractRecentChanges(root))
     }
+
+    @Test
+    fun `falls back to the relocated Play Store changelog field`() {
+        val root = Json.parseToJsonElement(
+            """[null,[null,null,[${"null,".repeat(144)}null,{"145":[null,[null,"Stability improvement"]]}]]]""",
+        )
+
+        assertEquals("Stability improvement", extractRecentChanges(root))
+    }
 }
