@@ -107,5 +107,5 @@ mavenPublishing {
 
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
-    signAllPublications()
+    if (!providers.gradleProperty("skipSigning").isPresent()) signAllPublications()
 }
