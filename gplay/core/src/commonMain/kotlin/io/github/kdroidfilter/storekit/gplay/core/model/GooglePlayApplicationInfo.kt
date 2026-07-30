@@ -55,6 +55,7 @@ data class GooglePlayCategory(val name: String, val id: String)
  * @property released Release date of the application
  * @property updated Last update timestamp
  * @property version Current version of the application
+ * @property recentChanges Changelog shown in the Google Play "What's new" section
  * @property comments List of user comments
  * @property appId Unique identifier of the application
  * @property url URL to the application's page on Google Play
@@ -102,6 +103,7 @@ data class GooglePlayApplicationInfo(
     val released: String = "",
     val updated: Long = 0,
     val version: String = "Varies with device",
+    val recentChanges: String = "",
     val comments: List<String> = emptyList(),
     val appId: String = "",
     val url: String = ""

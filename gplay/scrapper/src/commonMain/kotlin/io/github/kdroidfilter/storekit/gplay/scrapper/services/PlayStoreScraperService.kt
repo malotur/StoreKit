@@ -199,6 +199,7 @@ suspend fun getGooglePlayApplicationInfo(appId: String, lang: String = "en", cou
     val released = nestedLookup(detailJson, listOf(1,2,10,0)).asStringOrNull() ?: ""
     val updated = nestedLookup(detailJson, listOf(1,2,145,0,1,0)).asLongOrNull() ?: 0
     val version = nestedLookup(detailJson, listOf(1,2,140,0,0,0)).asStringOrNull() ?: "Varies with device"
+    val recentChanges = extractRecentChanges(detailJson)
 
     val url = "$BASE_PLAY_STORE_URL$DETAIL_PATH?id=$appId&hl=$lang&gl=$country"
 
@@ -244,8 +245,19 @@ suspend fun getGooglePlayApplicationInfo(appId: String, lang: String = "en", cou
         released = released,
         updated = updated,
         version = version,
+        recentChanges = recentChanges,
         comments = comments,
         appId = appId,
         url = url
     )
 }
+
+/**
+ * Google Play nests the visible changelog inside the app-detail dataset.  Keep this in one
+ * named helper so a future Play layout change is isolated and can be fixture-tested.
+ */
+internal fun extractRecentChanges(detailJson: JsonElement): String =
+    nestedLookup(detailJson, listOf(1, 2, 144, 1, 1)).asStringOrNull()
+        ?.filter { !it.isISOControl() || it == '\n' || it == '\t' }
+        ?.trim()
+        .orEmpty()
