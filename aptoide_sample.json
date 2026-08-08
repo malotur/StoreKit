@@ -1,0 +1,292 @@
+{
+  "id": 66834572,
+  "name": "Waze Navigation & Live Traffic",
+  "package_": "",
+  "package": "com.waze",
+  "uname": "waze-gps-maps-traffic-alerts-sat-nav",
+  "size": 89220331,
+  "icon": "https://pool.img.aptoide.com/ivan321/3a84d64738faf282d9aac44e0ec8291e_icon.png",
+  "graphic": "https://pool.img.aptoide.com/ivan321/3103e86d5a2394d90c260c2959efce3c_fgraphic.png",
+  "added": "2023-10-06 06:45:59",
+  "modified": "2024-01-09 23:47:16",
+  "updated": "2026-08-07 01:20:13",
+  "main_package": null,
+  "age": {
+    "name": "all",
+    "title": "Everyone",
+    "pegi": "PEGI-3",
+    "rating": 0
+  },
+  "developer": {
+    "id": 6255,
+    "name": "Waze",
+    "website": "http://www.waze.com",
+    "email": "support@waze.com",
+    "privacy": "http://www.waze.com/legal/privacy/"
+  },
+  "store": {
+    "id": 956666,
+    "name": "ivan321",
+    "avatar": "https://pool.img.aptoide.com/ivan321/3bf5adf05843f9f28c486d5ddef8f873_ravatar.jpg",
+    "appearance": {
+      "theme": "green",
+      "description": "instalirani"
+    },
+    "stats": {
+      "apps": 19,
+      "subscribers": 23,
+      "downloads": 0
+    }
+  },
+  "file": {
+    "vername": "4.100.1.0",
+    "vercode": 1030440,
+    "md5sum": "2e13e4f1f11bfa7b2832a85afd1bd218",
+    "filesize": 89220331,
+    "signature": {
+      "sha1": "35:B4:38:FE:1B:C6:9D:97:5D:C8:70:2D:C1:6A:B6:9E:BF:65:F2:6F",
+      "owner": "CN=Alex Agranovich, OU=Waze, O=Waze, L=Raanana, ST=Israel, C=Israel"
+    },
+    "added": "2024-01-09 23:47:16",
+    "path": "https://pool.apk.aptoide.com/ivan321/com-waze-1030440-66834572-2e13e4f1f11bfa7b2832a85afd1bd218.apk",
+    "path_alt": "https://pool.apk.aptoide.com/ivan321/com-waze-1030440-66834572-2e13e4f1f11bfa7b2832a85afd1bd218.apk",
+    "hardware": {
+      "sdk": 24,
+      "screen": "SMALL",
+      "gles": 2,
+      "cpus": [
+        "armeabi-v7a",
+        "arm64-v8a"
+      ],
+      "densities": [],
+      "dependencies": [
+        {
+          "type": "GMS",
+          "level": "HARD"
+        }
+      ]
+    },
+    "malware": {
+      "rank": "TRUSTED",
+      "reason": {
+        "signature_validated": {
+          "date": "2025-11-04",
+          "status": "unknown",
+          "signature_from": "market"
+        }
+      },
+      "added": "2024-01-09 23:47:17",
+      "modified": "2026-06-10 06:49:14"
+    },
+    "flags": {
+      "votes": [
+        {
+          "type": "FAKE",
+          "count": 0
+        },
+        {
+          "type": "FREEZE",
+          "count": 0
+        },
+        {
+          "type": "GOOD",
+          "count": 0
+        },
+        {
+          "type": "LICENSE",
+          "count": 0
+        },
+        {
+          "type": "VIRUS",
+          "count": 0
+        }
+      ]
+    },
+    "used_features": [
+      "android.hardware.faketouch",
+      "android.hardware.location",
+      "android.hardware.location.gps"
+    ],
+    "used_permissions": [
+      "android.car.permission.CAR_INFO",
+      "android.permission.ACCESS_BACKGROUND_LOCATION",
+      "android.permission.ACCESS_COARSE_LOCATION",
+      "android.permission.ACCESS_FINE_LOCATION",
+      "android.permission.ACCESS_LOCATION_EXTRA_COMMANDS",
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.BLUETOOTH_CONNECT",
+      "android.permission.BLUETOOTH_SCAN",
+      "android.permission.BROADCAST_STICKY",
+      "android.permission.CAMERA",
+      "android.permission.DOWNLOAD_WITHOUT_NOTIFICATION",
+      "android.permission.FOREGROUND_SERVICE",
+      "android.permission_group.POST_NOTIFICATIONS",
+      "android.permission.INTERNET",
+      "android.permission.MODIFY_AUDIO_SETTINGS",
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.READ_CALENDAR",
+      "android.permission.READ_CONTACTS",
+      "android.permission.READ_EXTERNAL_STORAGE",
+      "android.permission.READ_PHONE_STATE",
+      "android.permission.READ_PROFILE",
+      "android.permission.READ_SYNC_SETTINGS",
+      "android.permission.READ_SYNC_STATS",
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "android.permission.RECORD_AUDIO",
+      "android.permission.SYSTEM_ALERT_WINDOW",
+      "android.permission.VIBRATE",
+      "android.permission.WAKE_LOCK",
+      "android.permission.WRITE_EXTERNAL_STORAGE",
+      "android.permission.WRITE_SYNC_SETTINGS",
+      "androidx.car.app.ACCESS_SURFACE",
+      "androidx.car.app.NAVIGATION_TEMPLATES",
+      "com.google.android.c2dm.permission.RECEIVE",
+      "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE",
+      "com.google.android.gms.permission.AD_ID",
+      "com.waze.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+    ],
+    "tags": []
+  },
+  "media": {
+    "keywords": [
+      "waze",
+      "maps",
+      "navigation"
+    ],
+    "description": "Always know whatÆs happening on the road with Waze. Even if you know the way, Waze tells you about traffic, roadworks, police, accidents, and more in real-time. If traffic is bad on your route, Waze will change it to save you time. \n\nWhy Waze?\n? See whatÆs happening - Alerts about traffic, police, hazards and more on your drive\n? Get there faster - Instant routing changes to avoid traffic and save you time\n? Play music & more - listen to your favorite apps for music, podcasts & more right from Waze\n? Know when youÆll arrive - your ETA is based on live traffic data \n? Pay less for fuel - find the cheapest fuel along your route\n? Drive with Android Auto - use Waze on your carÆs display\n? Always find the way - choose from a variety of voices to guide you while you drive  \n\nBe prepared, drive with Waze!",
+    "summary": "Save time on every drive. Waze tells you about traffic, police, crashes & more",
+    "news": "Fixed a few bugs so itÆs easier to save time & avoid traffic with Waze.",
+    "videos": [
+      {
+        "type": "YOUTUBE",
+        "url": "https://www.youtube.com/embed/66jehpnKoUA"
+      }
+    ],
+    "screenshots": [
+      {
+        "url": "https://pool.img.aptoide.com/ivan321/055ed1145a28b5c73d1e4c4d1857534f_screen.png",
+        "height": 660,
+        "width": 1110
+      },
+      {
+        "url": "https://pool.img.aptoide.com/ivan321/5db045f6cc50b009e279336921e5191e_screen.png",
+        "height": 660,
+        "width": 1110
+      },
+      {
+        "url": "https://pool.img.aptoide.com/ivan321/e1136f29dd5050d88881f314ecc5307f_screen.png",
+        "height": 660,
+        "width": 1110
+      },
+      {
+        "url": "https://pool.img.aptoide.com/ivan321/ab4dcdb06f526c8976b60421f8ea8269_screen.png",
+        "height": 660,
+        "width": 1110
+      },
+      {
+        "url": "https://pool.img.aptoide.com/ivan321/4bf27af6fca0fc188262aea22cf4b7d3_screen.png",
+        "height": 660,
+        "width": 1110
+      },
+      {
+        "url": "https://pool.img.aptoide.com/ivan321/84023b93ce509a992871cfbe536b75e1_screen.png",
+        "height": 660,
+        "width": 1110
+      },
+      {
+        "url": "https://pool.img.aptoide.com/ivan321/511c5a48d24b6b8d480057ea053cfe63_screen.png",
+        "height": 660,
+        "width": 1110
+      },
+      {
+        "url": "https://pool.img.aptoide.com/ivan321/a1f6bcaed5744105bd3a26826259f3f1_screen.png",
+        "height": 768,
+        "width": 480
+      },
+      {
+        "url": "https://pool.img.aptoide.com/ivan321/00c30e9ac519666dbcc18b7087f06390_screen.png",
+        "height": 768,
+        "width": 480
+      },
+      {
+        "url": "https://pool.img.aptoide.com/ivan321/22df913f0bf65ae204f9a5fa088901b6_screen.png",
+        "height": 768,
+        "width": 1024
+      },
+      {
+        "url": "https://pool.img.aptoide.com/ivan321/eba42beb306cf9b7c0a95bee699a8d45_screen.png",
+        "height": 768,
+        "width": 1024
+      }
+    ]
+  },
+  "urls": {
+    "w": "https://waze-gps-maps-traffic-alerts-sat-nav.en.aptoide.com/?store_name=ivan321&app_id=66834572",
+    "m": "https://waze-gps-maps-traffic-alerts-sat-nav.en.aptoide.com/?store_name=ivan321&app_id=66834572"
+  },
+  "stats": {
+    "rating": {
+      "avg": 4.5,
+      "total": 2,
+      "votes": [
+        {
+          "value": 5,
+          "count": 1
+        },
+        {
+          "value": 4,
+          "count": 1
+        },
+        {
+          "value": 3,
+          "count": 0
+        },
+        {
+          "value": 2,
+          "count": 0
+        },
+        {
+          "value": 1,
+          "count": 0
+        }
+      ]
+    },
+    "prating": {
+      "avg": 4.45,
+      "total": 1155,
+      "votes": [
+        {
+          "value": 5,
+          "count": 853
+        },
+        {
+          "value": 4,
+          "count": 108
+        },
+        {
+          "value": 3,
+          "count": 114
+        },
+        {
+          "value": 2,
+          "count": 15
+        },
+        {
+          "value": 1,
+          "count": 65
+        }
+      ]
+    },
+    "downloads": 500000000,
+    "pdownloads": 500000000
+  },
+  "aab": null,
+  "obb": null,
+  "pay": null,
+  "appcoins": {
+    "advertising": false,
+    "billing": false,
+    "flags": []
+  },
+  "soft_locks": []
+}

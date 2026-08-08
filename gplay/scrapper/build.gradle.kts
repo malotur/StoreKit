@@ -43,6 +43,15 @@ kotlin {
             implementation(kotlin("test"))
         }
 
+        // Claude Code (claude-opus-5) — l'engine HTTP e' compileOnly per il consumatore, quindi i
+        // test non ne avevano nessuno e ogni chiamata reale falliva con NetworkUnavailable prima
+        // ancora di partire. Serve per le sonde dal vivo contro Google Play (punto #5: fixture reali).
+        jvmTest.dependencies {
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.kotlinx.coroutines.core)
+        }
+
         androidMain.dependencies {
             implementation(libs.kotlinx.coroutines.android)
         }

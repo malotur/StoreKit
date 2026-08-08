@@ -2,6 +2,8 @@ package io.github.kdroidfilter.storekit.gplay.scrapper.utils
 
 import io.github.kdroidfilter.storekit.gplay.scrapper.constants.BASE_PLAY_STORE_URL
 import io.github.kdroidfilter.storekit.gplay.scrapper.constants.DETAIL_PATH
+import io.github.kdroidfilter.storekit.gplay.scrapper.constants.SEARCH_PATH
+import io.github.kdroidfilter.storekit.gplay.scrapper.constants.SEARCH_CLUSTER_RPC_ID
 import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlHandler
 import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlParser
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -9,6 +11,12 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import io.ktor.http.ContentType
+import io.ktor.http.Parameters
+import io.ktor.http.URLBuilder
+import io.ktor.http.formUrlEncode
+import io.ktor.http.contentType
+import kotlinx.serialization.json.Json
 
 // Ktor HttpClient for making network requests
 
@@ -20,6 +28,7 @@ import io.ktor.client.statement.*
 internal object NetworkUtils {
     internal val logger = KotlinLogging.logger {}
     internal val client = HttpClient(CIO)
+    private val jsonEncoder = Json {}
 
     /**
      * Fetches the application page from the Play Store using the provided application ID.
@@ -34,6 +43,53 @@ internal object NetworkUtils {
         val url = "$BASE_PLAY_STORE_URL$DETAIL_PATH?id=$appId&hl=$lang&gl=$country"
         logger.info { "Fetching URL: $url" }
         return client.get(url)
+    }
+
+    internal suspend fun fetchSearchPage(
+        term: String,
+        lang: String,
+        country: String,
+        price: Int,
+    ): HttpResponse {
+        val url = URLBuilder("$BASE_PLAY_STORE_URL$SEARCH_PATH").apply {
+            parameters.append("c", "apps")
+            parameters.append("q", term)
+            parameters.append("hl", lang)
+            parameters.append("gl", country)
+            parameters.append("price", price.toString())
+        }.buildString()
+        logger.info { "Fetching Google Play search URL for term: $term" }
+        return client.get(url)
+    }
+
+    internal suspend fun fetchSearchClusterPage(
+        lang: String,
+        country: String,
+        body: String,
+    ): HttpResponse {
+        val url = URLBuilder("$BASE_PLAY_STORE_URL/_/PlayStoreUi/data/batchexecute").apply {
+            parameters.append("rpcids", SEARCH_CLUSTER_RPC_ID)
+            parameters.append("f.sid", "-697906427155521722")
+            parameters.append("bl", "boq_playuiserver_20190903.08_p0")
+            parameters.append("hl", lang)
+            parameters.append("gl", country)
+            parameters.append("authuser", "")
+            parameters.append("soc-app", "121")
+            parameters.append("soc-platform", "1")
+            parameters.append("soc-device", "1")
+            parameters.append("_reqid", "1065213")
+        }.buildString()
+        return client.post(url) {
+            contentType(ContentType.Application.FormUrlEncoded)
+            setBody(body)
+        }
+    }
+
+    internal fun buildSearchClusterBody(pageSize: Int, token: String): String {
+        val tokenJson = jsonEncoder.encodeToString(token)
+        val payload = "[[null,[[10,[10,$pageSize]],true,null,[96,27,4,8,57,30,110,79,11,16,49,1,3,9,12,104,55,56,51,10,34,77],null,$tokenJson]]]"
+        val envelope = "[[[\"$SEARCH_CLUSTER_RPC_ID\",${jsonEncoder.encodeToString(payload)},null,\"generic\"]]]"
+        return Parameters.build { append("f.req", envelope) }.formUrlEncode()
     }
 
     /**
