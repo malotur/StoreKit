@@ -59,6 +59,10 @@ data class GooglePlayCategory(val name: String, val id: String)
  * @property comments List of user comments
  * @property appId Unique identifier of the application
  * @property url URL to the application's page on Google Play
+ * @property isGovernmentApp Whether Google Play marks the publisher as a public authority. The
+ *   store shows this as a localized badge next to the developer name ("Pubblica amministrazione"
+ *   in Italian, "Government App" in English), so the flag — not the label — is what callers should
+ *   rely on.
  */
 @Serializable
 data class GooglePlayApplicationInfo(
@@ -106,5 +110,6 @@ data class GooglePlayApplicationInfo(
     val recentChanges: String = "",
     val comments: List<String> = emptyList(),
     val appId: String = "",
-    val url: String = ""
+    val url: String = "",
+    val isGovernmentApp: Boolean = false,
 )

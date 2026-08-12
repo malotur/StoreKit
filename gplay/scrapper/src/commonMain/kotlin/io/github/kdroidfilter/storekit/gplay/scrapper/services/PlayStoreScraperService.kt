@@ -131,11 +131,14 @@ suspend fun getGooglePlayApplicationInfo(appId: String, lang: String = "en", cou
 
     val comments = extractComments(datasets)
 
+    val isGovernmentApp = extractGovernmentBadge(html)
+
     val detailJson = datasets["ds:5"]
         ?: return GooglePlayApplicationInfo(
             appId = appId,
             url = "$BASE_PLAY_STORE_URL$DETAIL_PATH?id=$appId&hl=$lang&gl=$country",
-            comments = comments // even if empty, we set it
+            comments = comments, // even if empty, we set it
+            isGovernmentApp = isGovernmentApp
         )
 
     // descriptionHTML = nested_lookup(... [12,0,0,1]) or [72,0,1]
@@ -248,9 +251,23 @@ suspend fun getGooglePlayApplicationInfo(appId: String, lang: String = "en", cou
         recentChanges = recentChanges,
         comments = comments,
         appId = appId,
-        url = url
+        url = url,
+        isGovernmentApp = isGovernmentApp
     )
 }
+
+/**
+ * Google Play renders the public-authority badge in the page markup only: it is absent from every
+ * `AF_initDataCallback` dataset, so it cannot be read through [nestedLookup] like the other fields.
+ *
+ * The visible label is localized ("Pubblica amministrazione", "Administration publique", ...) but
+ * the accessibility label is not, which makes it the one stable anchor across `hl` values. Kept as
+ * a named helper — like [extractRecentChanges] — so a future markup change is isolated and can be
+ * fixture-tested.
+ */
+internal fun extractGovernmentBadge(html: String): Boolean =
+    html.contains("aria-label=\"Government App\"") ||
+        html.contains("aria-label='Government App'")
 
 /**
  * Google Play nests the visible changelog inside the app-detail dataset.  Keep this in one
