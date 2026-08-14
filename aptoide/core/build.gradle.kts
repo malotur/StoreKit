@@ -118,5 +118,6 @@ mavenPublishing {
 
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
-    signAllPublications()
+    // Le pubblicazioni locali non richiedono le credenziali Maven Central dell'autore.
+    if (!providers.gradleProperty("skipSigning").isPresent()) signAllPublications()
 }
