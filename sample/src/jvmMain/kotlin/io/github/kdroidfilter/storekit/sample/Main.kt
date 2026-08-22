@@ -10,6 +10,13 @@ import io.github.kdroidfilter.storekit.fdroid.api.services.FDroidService
 import io.github.kdroidfilter.storekit.apkpure.scraper.services.getApkPureApplicationInfo
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import io.github.kdroidfilter.storekit.gplay.scrapper.services.searchGooglePlay
+import io.github.kdroidfilter.storekit.gplay.scrapper.services.GooglePlaySearchOutcome
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonArray
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.add
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -19,6 +26,47 @@ import java.nio.file.Paths
  * and prints them as JSON.
  */
 fun main(args: Array<String>) {
+
+    // Claude Code (claude-opus-5) — modalita' batch di **ricerca**, il complemento della batch per
+    // pacchetto che segue. Serve alla misura di richiamo delle keyword del catalogo JINA
+    // (JINA_KEYWORD_RECALL_TEST.md): fin qui quella misura si faceva a mano, e una parola non si
+    // spedisce senza misurarla. Uso: `--search LANG COUNTRY MAXRESULTS TERM...`; ogni riga stdout
+    // e' `{"term":...,"lang":...,"country":...,"results":[{appId,rank,title}...]}`.
+    if (args.firstOrNull() == "--search" && args.size >= 5) {
+        val lang = args[1]
+        val country = args[2]
+        val maxResults = args[3].toIntOrNull() ?: 20
+        val json = Json { encodeDefaults = true }
+        runBlocking {
+            args.drop(4).forEach { term ->
+                val outcome = searchGooglePlay(term, lang, country, maxResults)
+                val results = when (outcome) {
+                    is GooglePlaySearchOutcome.Success -> outcome.response.results
+                    is GooglePlaySearchOutcome.Partial -> outcome.response.results
+                    is GooglePlaySearchOutcome.Failure -> {
+                        System.err.println("STOREKIT_SEARCH_ERROR\t$term\t${outcome.error}")
+                        emptyList()
+                    }
+                }
+                val payload = buildJsonObject {
+                    put("term", JsonPrimitive(term))
+                    put("lang", JsonPrimitive(lang))
+                    put("country", JsonPrimitive(country))
+                    put("results", buildJsonArray {
+                        results.forEach { result ->
+                            add(buildJsonObject {
+                                put("appId", JsonPrimitive(result.appId))
+                                put("rank", JsonPrimitive(result.rank))
+                                put("title", JsonPrimitive(result.title))
+                            })
+                        }
+                    })
+                }
+                println(json.encodeToString(JsonObject.serializer(), payload))
+            }
+        }
+        return
+    }
 
     // Modalita' batch minimale per tooling e fixture: LANG COUNTRY PACKAGE...
     // Ogni riga stdout e' un GooglePlayApplicationInfo JSON completo. Senza argomenti il sample
@@ -30,8 +78,12 @@ fun main(args: Array<String>) {
         val packages = args.drop(2).filterNot { it.startsWith("--output=") }
         val json = Json { encodeDefaults = true }
         val lines = runBlocking {
-            packages.map { packageName ->
-                json.encodeToString(getGooglePlayApplicationInfo(packageName, lang, country))
+            packages.mapNotNull { packageName ->
+                runCatching {
+                    json.encodeToString(getGooglePlayApplicationInfo(packageName, lang, country))
+                }.onFailure { error ->
+                    System.err.println("STOREKIT_BATCH_ERROR\t$packageName\t${error.message}")
+                }.getOrNull()
             }
         }
         if (outputArgument != null) {
