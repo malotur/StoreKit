@@ -68,6 +68,66 @@ fun main(args: Array<String>) {
         return
     }
 
+    // Batch discovery from a TSV file. Each non-empty line is:
+    // queryId<TAB>LANG<TAB>COUNTRY<TAB>MAX_RESULTS<TAB>TERM
+    // This keeps terms containing spaces intact when Gradle invokes the sample.
+    // It is discovery-only: only appId/rank/title are emitted, never descriptions or labels.
+    if (args.firstOrNull() == "--search-file" && args.size >= 2) {
+        val json = Json { encodeDefaults = true }
+        val lines = Files.readAllLines(Paths.get(args[1]), StandardCharsets.UTF_8)
+        val outputArgument = args.firstOrNull { it.startsWith("--output=") }
+        val writer = outputArgument?.let {
+            val output = Paths.get(it.substringAfter("="))
+            output.parent?.let(Files::createDirectories)
+            Files.newBufferedWriter(output, StandardCharsets.UTF_8)
+        }
+        try {
+            runBlocking {
+                lines.asSequence()
+                    .map(String::trimEnd)
+                    .filter(String::isNotBlank)
+                    .forEach { line ->
+                    val fields = line.split('\t', limit = 5)
+                    require(fields.size == 5) { "Invalid search TSV line: $line" }
+                    val queryId = fields[0]
+                    val lang = fields[1]
+                    val country = fields[2]
+                    val maxResults = fields[3].toIntOrNull() ?: 30
+                    val term = fields[4]
+                    val outcome = searchGooglePlay(term, lang, country, maxResults)
+                    val results = when (outcome) {
+                        is GooglePlaySearchOutcome.Success -> outcome.response.results
+                        is GooglePlaySearchOutcome.Partial -> outcome.response.results
+                        is GooglePlaySearchOutcome.Failure -> {
+                            System.err.println("STOREKIT_SEARCH_ERROR\t$queryId\t$term\t${outcome.error}")
+                            emptyList()
+                        }
+                    }
+                    val payload = buildJsonObject {
+                        put("queryId", JsonPrimitive(queryId))
+                        put("term", JsonPrimitive(term))
+                        put("lang", JsonPrimitive(lang))
+                        put("country", JsonPrimitive(country))
+                        put("results", buildJsonArray {
+                            results.forEach { result ->
+                                add(buildJsonObject {
+                                    put("appId", JsonPrimitive(result.appId))
+                                    put("rank", JsonPrimitive(result.rank))
+                                    put("title", JsonPrimitive(result.title))
+                                })
+                            }
+                        })
+                    }
+                        val encoded = json.encodeToString(JsonObject.serializer(), payload)
+                        if (writer != null) writer.appendLine(encoded) else println(encoded)
+                    }
+            }
+        } finally {
+            writer?.close()
+        }
+        return
+    }
+
     // Modalita' batch minimale per tooling e fixture: LANG COUNTRY PACKAGE...
     // Ogni riga stdout e' un GooglePlayApplicationInfo JSON completo. Senza argomenti il sample
     // storico continua a mostrare tutti i provider.
